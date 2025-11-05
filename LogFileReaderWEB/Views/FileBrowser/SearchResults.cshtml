@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Search Results";
+    var results = (List<FileInfo>)Model;
+}
+
+<h2>🔍 Search Results for: <em>@ViewBag.Keyword</em></h2>
+
+@if (results.Count == 0)
+{
+    <p>No files found containing this keyword.</p>
+}
+else
+{
+    <ul>
+        @foreach (var file in results)
+        {
+            <li>
+                <a href="@Url.Action("FileView", new { path = file.FullName })">@file.FullName</a>
+            </li>
+        }
+    </ul>
+}
+
+<a href="@Url.Action("Index", new { path = ViewBag.SearchPath })">⬅️ Back to Browser</a>

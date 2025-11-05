@@ -1,0 +1,41 @@
+﻿@model IEnumerable<string>
+@{
+    ViewBag.Title = "File Viewer";
+    string keyword = ViewBag.Keyword ?? "";
+}
+
+<h2>📄 Viewing File: @ViewBag.FileName</h2>
+<p>Path: @ViewBag.FilePath</p>
+
+<!-- Go Back to Parent Folder -->
+@if (ViewBag.ParentPath != null)
+{
+    <a class="btn btn-outline-secondary btn-sm mb-3"
+       href="@Url.Action("Index", new { path = ViewBag.ParentPath })">
+        <i class="bi bi-arrow-left"></i> Back
+    </a>
+}
+
+<!-- Search Form -->
+<form method="get" asp-action="FileView" asp-controller="FileBrowser" class="mb-3">
+    <input type="hidden" name="path" value="@ViewBag.FilePath" />
+    <input type="text" name="keyword" placeholder="Search keyword..." value="@keyword" class="form-control mb-2" />
+    <button type="submit" class="btn btn-outline-primary btn-sm">Search</button>
+</form>
+
+<!-- File Content -->
+<pre style="background:#f8f9fa; padding:15px; border-radius:10px; border:1px solid #ccc; white-space: pre-wrap;">
+@foreach (var line in Model)
+{
+        if (!string.IsNullOrEmpty(keyword))
+        {
+                var highlighted = line.Replace(keyword, $"<mark>{keyword}</mark>", StringComparison.OrdinalIgnoreCase);
+                @Html.Raw(highlighted)
+        }
+        else
+        {
+                @line
+        }
+    <br />
+}
+</pre>
